@@ -9,4 +9,17 @@ class Student extends Model
 {
     /** @use HasFactory<\Database\Factories\StudentFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'khmer_name',
+        'latin_name',
+        'gender',
+        'dob',
+        'address',
+        'tel',
+    ];
+
+    protected $casts = [
+        'dob' => 'date',
+    ];
 }
