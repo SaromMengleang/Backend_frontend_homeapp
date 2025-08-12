@@ -212,14 +212,16 @@ class _StudentScreenState extends State<StudentScreen> {
           child: Card(
             child: ListTile(
               title: Text(item.latinName ?? "No Name"),
-              subtitle: Text(
-                item.khmerName ?? "No Khmer Name",
-                style: TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
+              subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.khmerName ?? "No Khmer Name"),
+                Text(item.gender ?? "No gender"),
+                Text(item.dob ?? "No dob"),
+                Text(item.address ?? "No address"),
+                Text(item.tel ?? "No tel"),
+              ],
+            ),
 
               onTap: () async {
                 bool edited = await Navigator.of(
@@ -235,7 +237,7 @@ class _StudentScreenState extends State<StudentScreen> {
                   });
                 }
               },
-              // subtitle: Text(item.updatedAt),
+              
             ),
           ),
         );

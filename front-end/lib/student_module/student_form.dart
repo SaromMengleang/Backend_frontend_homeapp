@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'message_util.dart';
 import 'student_model.dart';
 import 'student_service.dart';
+import 'package:intl/intl.dart';
+// import 'package:dropdown_search/dropdown_search.dart';
 class StudentForm extends StatefulWidget {
   //const StudetForm({super.key});
   Datum ? item;
@@ -78,16 +80,112 @@ class _StudentFormState extends State<StudentForm> {
       key: _formkey,
       child: ListView(
         padding: EdgeInsets.all(10),
-        children: [_buildNameTextField(),_buildButton(),_buildOutput()],
+        children: [
+          _buildkhNameTextField(),
+          SizedBox(height: 16), 
+          _buildNameTextField(),
+          SizedBox(height: 16), 
+          _buildGenderDropdown(),
+          SizedBox(height: 16), 
+          _buildDOBPicker(),
+          SizedBox(height: 16), 
+          _buildAddressTextField(),
+          SizedBox(height: 16), 
+          _buildNumberTextField(),
+          SizedBox(height: 24), 
+          _buildButton(),
+          SizedBox(height: 16), 
+          _buildOutput(),
+        ],
       ),
     );
+  }
+  final List<String> genders = ['Male', 'Female', 'Other'];
+  String? _selectedGender;
+
+  Widget _buildGenderDropdown() {
+      return DropdownButtonFormField<String>(
+          value: _selectedGender,
+          items: genders.map((gender) {
+              return DropdownMenuItem(
+                  value: gender,
+                  child: Text(gender),
+              );
+          }).toList(),
+          onChanged: (value) {
+              setState(() {
+                  _selectedGender = value;
+              });
+          },
+          decoration: InputDecoration(
+              labelText: 'Gender',
+              border: OutlineInputBorder(),
+          ),
+          validator: (value) => value == null ? 'Please select a gender' : null,
+      );
+  }
+  DateTime? _selectedDate;
+  void _gestureOnTab() async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: _selectedDate ?? DateTime(2000),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now(),
+    );
+    if (pickedDate != null) {
+        setState(() => _selectedDate = pickedDate);
+    }
+}
+
+  Widget _buildDOBPicker() {
+      return GestureDetector(
+          onTap: _gestureOnTab,
+          child: InputDecorator(
+              decoration: InputDecoration(
+                  labelText: 'Date of Birth',
+                  border: OutlineInputBorder(),
+              ),
+              child: Text(
+                  _selectedDate != null
+                      ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
+                      : 'Select your date of birth',
+              ),
+          ),
+      );
   }
   Widget _buildNameTextField() {
     return TextFormField(
       controller: _nameCtrl,
       decoration: InputDecoration(
           border: OutlineInputBorder(),
-          hintText: "Enter Name"
+          hintText: "Enter English Name"
+      ),
+    );
+  }
+  Widget _buildkhNameTextField() {
+    return TextFormField(
+      controller: _nameCtrl,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "Enter khmer Name"
+      ),
+    );
+  }
+  Widget _buildAddressTextField() {
+    return TextFormField(
+      controller: _nameCtrl,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "Enter Address"
+      ),
+    );
+  }
+  Widget _buildNumberTextField() {
+    return TextFormField(
+      controller: _nameCtrl,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "Enter PhoneNumber"
       ),
     );
   }
